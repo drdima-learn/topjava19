@@ -37,6 +37,8 @@ public class InMemoryMealRepository implements MealRepository {
         save(new Meal(LocalDateTime.of(2015, Month.JUNE, 1, 21, 0), "Админ ужин", 1500), ADMIN_ID);
     }
 
+    public InMemoryMealRepository() {
+    }
 
     @Override
     public Meal save(Meal meal, int userId) {

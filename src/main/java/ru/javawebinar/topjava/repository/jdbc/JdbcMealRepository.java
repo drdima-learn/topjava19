@@ -28,6 +28,9 @@ public class JdbcMealRepository implements MealRepository {
 
     private final SimpleJdbcInsert insertMeal;
 
+
+
+
     @Autowired
     public JdbcMealRepository(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         this.insertMeal = new SimpleJdbcInsert(jdbcTemplate)
@@ -38,12 +41,15 @@ public class JdbcMealRepository implements MealRepository {
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
     }
 
+
+
+
     @Override
     public Meal save(Meal meal, int userId) {
         MapSqlParameterSource map = new MapSqlParameterSource()
                 .addValue("id", meal.getId())
                 .addValue("user_id", userId)
-                .addValue("date_Time", meal.getDateTime())
+                .addValue("date_time", Timestamp.valueOf(meal.getDateTime()))
                 .addValue("description", meal.getDescription())
                 .addValue("calories", meal.getCalories());
 
@@ -52,8 +58,8 @@ public class JdbcMealRepository implements MealRepository {
             Number newKey = insertMeal.executeAndReturnKey(map);
             meal.setId(newKey.intValue());
         } else if (namedParameterJdbcTemplate.update(
-                "UPDATE meals SET date_time=:date_time, description=:description, calories=:calories, " +
-                        "WHERE id=:id", map) == 0) {
+                "UPDATE meals SET date_time=:date_time, description=:description, calories=:calories " +
+                        "WHERE id=:id AND user_id=:user_id", map) == 0) {
             return null;
         }
         return meal;
@@ -72,7 +78,7 @@ public class JdbcMealRepository implements MealRepository {
 
     @Override
     public List<Meal> getAll(int userId) {
-        return jdbcTemplate.query("SELECT * FROM meals ORDER BY date_time DESC", ROW_MAPPER);
+        return jdbcTemplate.query("SELECT * FROM meals ORDER BY date_time", ROW_MAPPER);
     }
 
     @Override
