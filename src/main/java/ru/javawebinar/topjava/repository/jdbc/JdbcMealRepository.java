@@ -9,7 +9,6 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.MealRepository;
 
 import java.sql.Timestamp;
@@ -29,8 +28,6 @@ public class JdbcMealRepository implements MealRepository {
     private final SimpleJdbcInsert insertMeal;
 
 
-
-
     @Autowired
     public JdbcMealRepository(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         this.insertMeal = new SimpleJdbcInsert(jdbcTemplate)
@@ -40,8 +37,6 @@ public class JdbcMealRepository implements MealRepository {
         this.jdbcTemplate = jdbcTemplate;
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
     }
-
-
 
 
     @Override
@@ -67,12 +62,12 @@ public class JdbcMealRepository implements MealRepository {
 
     @Override
     public boolean delete(int id, int userId) {
-            return jdbcTemplate.update("DELETE FROM meals WHERE id=? and user_id=?", id , userId) != 0;
+        return jdbcTemplate.update("DELETE FROM meals WHERE id=? and user_id=?", id, userId) != 0;
     }
 
     @Override
     public Meal get(int id, int userId) {
-        List<Meal> meals = jdbcTemplate.query("SELECT * FROM meals WHERE id=? and user_id=?", ROW_MAPPER, id,userId);
+        List<Meal> meals = jdbcTemplate.query("SELECT * FROM meals WHERE id=? and user_id=?", ROW_MAPPER, id, userId);
         return DataAccessUtils.singleResult(meals);
     }
 
@@ -90,7 +85,7 @@ public class JdbcMealRepository implements MealRepository {
                 "SELECT * FROM meals " +
                         "WHERE user_id=? AND " +
                         "date_time BETWEEN ? AND ? " +
-                        "ORDER BY date_time DESC ", ROW_MAPPER,userId,
+                        "ORDER BY date_time DESC ", ROW_MAPPER, userId,
                 java.sql.Date.valueOf(startDate.toLocalDate()),
                 java.sql.Date.valueOf(endDate.toLocalDate().plusDays(1)));
     }
