@@ -1,7 +1,13 @@
 package ru.javawebinar.topjava.service;
 
+import org.junit.AfterClass;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
+import org.junit.rules.TestWatcher;
+import org.junit.runner.Description;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
@@ -11,8 +17,14 @@ import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.Month;
+import java.util.HashMap;
+import java.util.Map;
 
+import static org.hamcrest.core.StringStartsWith.startsWith;
+import static org.slf4j.LoggerFactory.getLogger;
 import static ru.javawebinar.topjava.MealTestData.*;
 import static ru.javawebinar.topjava.UserTestData.ADMIN_ID;
 import static ru.javawebinar.topjava.UserTestData.USER_ID;
@@ -25,6 +37,47 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 public class MealServiceTest {
 
+    private static final Logger log = getLogger(MealServiceTest.class);
+
+
+//    @Rule
+//    public LogRule rule = new LogRule();
+
+    private static Map<String, LocalTime> testTimeMap = new HashMap<>();
+
+    @Rule
+    public TestWatcher summaryTimeRule = new TestWatcher() {
+
+        @Override
+        protected void starting(Description description) {
+            log.info("Test name: \"{}\" has started ",description.getMethodName());
+            testTimeMap.put(description.getMethodName(),LocalTime.now());
+            super.starting(description);
+        }
+
+        @Override
+        protected void finished(Description description) {
+            super.finished(description);
+            log.debug("Test name: \"{}\" has ended ",description.getMethodName());
+            testTimeMap.put(description.getMethodName(),LocalTime.now().minusSeconds(testTimeMap.get(description.getMethodName()).toSecondOfDay() ));
+
+        }
+    };
+
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
+
+    @AfterClass
+    public static void printSummary(){
+        log.info("============= Summary ===============");
+        for (Map.Entry<String, LocalTime> entry : testTimeMap.entrySet()) {
+            log.info("Test : '{}'  Time : {}", entry.getKey() , entry.getValue());
+        }
+        log.info("============= End of Summary ===============");
+
+    }
+
+
     @Autowired
     private MealService service;
 
@@ -34,8 +87,11 @@ public class MealServiceTest {
         assertMatch(service.getAll(USER_ID), MEAL6, MEAL5, MEAL4, MEAL3, MEAL2);
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test(/*expected = NotFoundException.class*/)
     public void deleteNotFound() throws Exception {
+        thrown.expect(NotFoundException.class);
+        thrown.expectMessage("Not found");
+        //thrown.expectMessage(("not found"));
         service.delete(1, USER_ID);
     }
 

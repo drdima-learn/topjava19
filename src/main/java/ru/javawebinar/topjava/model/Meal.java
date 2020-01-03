@@ -1,19 +1,49 @@
 package ru.javawebinar.topjava.model;
 
-import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
+
+@NamedQueries({
+
+        @NamedQuery(name = Meal.ALL_SORTED, query = "SELECT m FROM Meal m WHERE m.user.id=:user_id ORDER BY m.dateTime DESC "),
+        @NamedQuery(name = Meal.UPDATE, query = "UPDATE Meal m SET m.dateTime = :dateTime, m.calories = :calories , m.description = :description WHERE m.id=:id AND m.user.id = :userId  "),
+        //@NamedQuery(name = Meal.CREATE, query = "CREATE INTO Meal m WHERE m.user.id=:user_id ORDER BY m.dateTime DESC "),
+        @NamedQuery(name = Meal.FIND_BY_ID, query = "SELECT m FROM Meal m WHERE m.id=:id AND m.user.id=:user_id "),
+        @NamedQuery(name = Meal.DELETE, query = "DELETE FROM Meal m WHERE m.id=:id AND m.user.id=:user_id "),
+        @NamedQuery(name = Meal.BETWEEN, query = "SELECT m FROM Meal m WHERE m.user.id=:userId " +
+                "AND m.dateTime BETWEEN :startDate AND :endDate ORDER BY m.dateTime DESC "),
+})
+
+@Entity
+@Table(name="meals")
 public class Meal extends AbstractBaseEntity {
+
+    public static final String ALL_SORTED = "Meal.getAllSorted";
+    public static final String UPDATE = "Meal.update";
+    //public static final String CREATE = "Meal.create";
+    public static final String FIND_BY_ID = "Meal.findById";
+    public static final String DELETE = "Meal.delete";
+    public static final String BETWEEN = "Meal.between";
+
+
+    @Column(name = "date_time", nullable = false)
     private LocalDateTime dateTime;
 
+    @Column(name = "description", nullable = true)
+    @Size(max = 100)
     private String description;
 
+    @Column(name = "calories", nullable = false)
+    @NotNull
     private int calories;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY ,cascade=CascadeType.ALL)
+    @JoinColumn(name = "user_id")
     private User user;
 
     public Meal() {
