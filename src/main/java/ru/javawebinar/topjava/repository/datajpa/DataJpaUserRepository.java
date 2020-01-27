@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.UserRepository;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 
 @Repository
@@ -27,7 +28,8 @@ public class DataJpaUserRepository implements UserRepository {
 
     @Override
     public User get(int id) {
-        return crudRepository.findById(id).orElse(null);
+        //return crudRepository.findById(id).orElse(null);
+        return crudRepository.findOne(id);
     }
 
     @Override
@@ -38,5 +40,10 @@ public class DataJpaUserRepository implements UserRepository {
     @Override
     public List<User> getAll() {
         return crudRepository.findAll(SORT_NAME_EMAIL);
+    }
+
+    @Override
+    public User getWithMeals(Integer id) {
+        return crudRepository.getWithMeals(id);
     }
 }

@@ -40,7 +40,7 @@ public class Meal extends AbstractBaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    @NotNull
+    //@NotNull
     private User user;
 
     public Meal() {
@@ -96,6 +96,7 @@ public class Meal extends AbstractBaseEntity {
     public void setUser(User user) {
         this.user = user;
     }
+
 
     @Override
     public String toString() {

@@ -42,5 +42,32 @@ public class DateTimeUtil {
     private static LocalDateTime startOfDay(LocalDate localDate) {
         return LocalDateTime.of(localDate, LocalTime.MIN);
     }
+
+    private static LocalDateTime endOfDay(LocalDate localDate) {
+        return LocalDateTime.of(localDate, LocalTime.MAX.withNano(0));
+    }
+
+    public static LocalDateTime getEndInclusive(LocalDate localDate) {
+        return endOfDay(localDate != null ? localDate : MAX_DATE);
+    }
+
+    public static String convertLocalDateTimeToString(LocalDateTime ldt){
+        String s=null;
+        s=addThreeZero(ldt.getYear()) + "-" + addZero(ldt.getMonthValue()) + "-" + addZero(ldt.getDayOfMonth()) + " "
+                + addZero(ldt.getHour()) + ":" + addZero(ldt.getMinute()) + ":" + addZero(ldt.getSecond());
+
+        //s=s.replace("T"," ");
+        return s;
+    }
+
+    private static String addZero(Integer n){
+        return n>=0 && n<10 ? "0"+n : n.toString();
+    }
+
+    private static String addThreeZero(Integer n){
+        return n>=0 && n<10 ? "000"+n : n.toString();
+    }
+
+
 }
 
