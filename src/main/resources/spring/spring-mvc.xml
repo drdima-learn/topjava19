@@ -7,6 +7,7 @@
 
     <mvc:annotation-driven/>
 
+
     <context:component-scan base-package="ru.javawebinar.**.web"/>
 
     <!--  all resources inside folder src/main/webapp/resources are mapped so they can be referred to inside JSP files -->
@@ -32,5 +33,9 @@
           p:defaultEncoding="UTF-8">
         <property name="basenames" value="file:///#{systemEnvironment['TOPJAVA_ROOT']}/config/messages/app"/>
         <property name="fallbackToSystemLocale" value="false"/>
+
+    </bean>
+    <bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
+        <property name="defaultLocale" value="ru_RU" /> <!--change this-->
     </bean>
 </beans>
