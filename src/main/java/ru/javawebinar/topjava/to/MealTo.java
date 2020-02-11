@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 public class MealTo {
     private final Integer id;
 
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private final LocalDateTime dateTime;
 
     private final String description;
