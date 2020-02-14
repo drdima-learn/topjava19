@@ -37,6 +37,8 @@ public class MealTestData {
         return new Meal(MEAL1_ID, MEAL1.getDateTime(), "Обновленный завтрак", 200);
     }
 
+
+
     public static void assertMatch(Meal actual, Meal expected) {
         assertThat(actual).isEqualToIgnoringGivenFields(expected, "user");
     }
@@ -64,6 +66,10 @@ public class MealTestData {
 
     public static ResultMatcher contentJson(Iterable<MealTo> expected) {
         return result -> assertMatchMealTo(readListFromJsonMvcResult(result, MealTo.class), expected);
+    }
+
+    public static ResultMatcher contentJson(MealTo... expected) {
+        return result -> assertMatchMealTo(readListFromJsonMvcResult(result, MealTo.class), List.of(expected));
     }
 
 }

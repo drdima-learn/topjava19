@@ -18,6 +18,8 @@ import ru.javawebinar.topjava.util.MealsUtil;
 import ru.javawebinar.topjava.web.AbstractControllerTest;
 import ru.javawebinar.topjava.web.json.JsonUtil;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -102,5 +104,19 @@ public class MealRestControllerTest extends AbstractControllerTest {
         //assertThrows(IllegalArgumentException.class, () -> mealService.get(MEAL1_ID,authUserId()));
         //assertMatch(mealService.get(MEAL1_ID+1,authUserId()), updated);
     }
+
+
+    @Test
+    void getBetween() throws Exception {
+
+        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL + "/getBetween/"+ "?startLdt=2015-05-30T00:00:00&endLdt=2015-05-30T23:59:59"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(MealTestData.contentJson(MealsUtil.getTos(List.of(MealTestData.MEAL3, MealTestData.MEAL2, MealTestData.MEAL1),authUserCaloriesPerDay())));
+
+
+    }
+
+
 
 }
