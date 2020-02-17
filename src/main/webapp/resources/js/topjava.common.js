@@ -18,7 +18,10 @@ function makeEditable(ctx) {
 }
 
 function add() {
-    form.find(":input").val("");
+    $("form").each(function(){
+        $(this).find(":input").val("");
+    });
+    //form.find(":input").val("");
     $("#editRow").modal();
 }
 
