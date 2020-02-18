@@ -16,7 +16,7 @@
 				<section>
 					<h3><spring:message code="meal.title"/></h3>
 
-					<form method="get" action="meals/filter">
+					<form id="filterForm">
 						<dl>
 							<dt><spring:message code="meal.startDate"/>:</dt>
 							<dd><input type="date" name="startDate" value="${param.startDate}"></dd>
@@ -33,7 +33,8 @@
 							<dt><spring:message code="meal.endTime"/>:</dt>
 							<dd><input type="time" name="endTime" value="${param.endTime}"></dd>
 						</dl>
-						<button type="submit"><spring:message code="meal.filter"/></button>
+						<button type="button" id="buttonFilter"><spring:message code="meal.filter"/></button>
+						<button type="button" id="resetFilter"><spring:message code="meal.resetFilter"/></button>
 					</form>
 					<hr>
 
@@ -66,7 +67,7 @@
 								<td>${meal.description}</td>
 								<td>${meal.calories}</td>
 								<td><a><span class="fa fa-pencil" alt="<spring:message code="common.update"/>"></span></a></td>
-								<td><a class="delete" id="${meal.id}" alt="<spring:message code="common.delete"/>"><span class="fa fa-remove" ></span></a></td>
+								<td><a class="delete" data-id="${meal.id}" alt="<spring:message code="common.delete"/>"><span class="fa fa-remove" ></span></a></td>
 							</tr>
 						</c:forEach>
 					</table>

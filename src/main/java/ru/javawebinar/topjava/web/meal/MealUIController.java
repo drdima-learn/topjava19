@@ -11,7 +11,9 @@ import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.to.MealTo;
 import ru.javawebinar.topjava.web.user.AbstractUserController;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @RestController
@@ -37,12 +39,19 @@ public class MealUIController extends AbstractMealController {
                                @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateTime,
                                @RequestParam String description,
                                @RequestParam Integer calories) {
-
-
-
         Meal meal = new Meal(id, dateTime, description, calories);
         if (meal.isNew()) {
             super.create(meal);
         }
     }
+
+    @GetMapping(value="/getBetween",produces = MediaType.APPLICATION_JSON_VALUE)
+    //@ResponseStatus(value = HttpStatus.NO_CONTENT)
+    public List<MealTo> getBetween(@Nullable LocalDate startDate, @Nullable LocalTime startTime,
+                           @Nullable LocalDate endDate, @Nullable LocalTime endTime) {
+
+        return super.getBetween(startDate,startTime,endDate,endTime);
+
+    }
+
 }

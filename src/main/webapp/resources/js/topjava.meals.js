@@ -33,4 +33,29 @@ $(function () {
             })
         }
     );
+    makeFilter();
+    makeResetFilter();
 });
+
+function makeFilter(){
+    $("#buttonFilter").click(function(){
+        $.ajax({
+            type: "GET",
+            url: context.ajaxUrl + "getBetween",
+            data: $('#filterForm').serialize()
+        }).done(function () {
+            //$("#editRow").modal("hide");
+            updateTable();
+            successNoty("Filtered");
+        });
+    });
+}
+
+function makeResetFilter(){
+    $("#resetFilter").click(function(){
+        $("#filterForm").each(function(){
+            $(this).find(":input").val("");
+        });
+        $("#buttonFilter").click();
+    });
+}
