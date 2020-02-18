@@ -1,3 +1,5 @@
+
+
 // $(document).ready(function () {
 $(function () {
     makeEditable({
@@ -39,4 +41,17 @@ $(function () {
             })
         }
     );
+    makeUserEnabled();
 });
+
+function makeUserEnabled() {
+    $(".userEnabled").click(function () {
+        $.ajax({
+            url: context.ajaxUrl + $(this).data("id") + "/" + $(this).prop("checked"),
+            type: "PUT"
+        }).done(function () {
+            updateTable();
+            successNoty("Updated");
+        });
+    });
+}

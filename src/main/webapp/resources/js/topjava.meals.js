@@ -59,3 +59,4 @@ function makeResetFilter(){
         $("#buttonFilter").click();
     });
 }
+
