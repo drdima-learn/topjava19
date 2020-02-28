@@ -6,3 +6,4 @@
         <span class="text-muted"><spring:message code="app.footer"/></span>
     </div>
 </footer>
+<jsp:include page="i18nCommon.jsp"/>
