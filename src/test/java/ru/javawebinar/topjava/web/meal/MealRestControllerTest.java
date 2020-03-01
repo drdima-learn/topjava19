@@ -43,6 +43,14 @@ class MealRestControllerTest extends AbstractControllerTest {
                 .andExpect(result -> assertMatch(readFromJsonMvcResult(result, Meal.class), MEAL1));
     }
 
+
+    @Test
+    void getUnAuthorized() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL + MEAL1_ID))
+                .andExpect(status().is4xxClientError());
+
+    }
+
     @Test
     void delete() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.delete(REST_URL + MEAL1_ID)
