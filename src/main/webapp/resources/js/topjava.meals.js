@@ -4,6 +4,18 @@ function updateFilteredTable() {
     $.ajax({
         type: "GET",
         url: mealAjaxUrl + "filter",
+        dataType: "jsong",
+        contentType: "application/jsong",
+        // contents: {
+        //     mycustomtype: /mycustomtype/
+        // },
+        converters: {
+            "json jsong": function( result ) {
+                // Какие то действия
+                console.log("pre-processing..." + result);
+                return "dddTttt";
+            }
+        },
         data: $("#filter").serialize()
     }).done(updateTableByData);
 }

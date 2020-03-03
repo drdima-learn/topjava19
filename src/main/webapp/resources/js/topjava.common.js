@@ -8,22 +8,23 @@ function makeEditable(ctx) {
     });
 
     // solve problem with cache in IE: https://stackoverflow.com/a/4303862/548473
-    $.ajaxSetup({cache: false});
+    $.ajaxSetup({
+        cache: false,
+
+
+    });
 
     //pickDateTimeSetFormatter();
     initDateTimePicker();
 }
 
 function initDateTimePicker(){
-    jQuery.datetimepicker.setLocale('en');
-    jQuery('#startDate').datetimepicker();
-    //jQuery('#startDate').datetimepicker({
-       // startDate:'2020/05/01' //or 1986/12/08
+    jQuery('#startDate').datetimepicker({timepicker:false, format:'d.m.Y'});
+    jQuery('#endDate').datetimepicker({timepicker:false, format:'d.m.Y'});
 
-        //formatDate:'Y/m/d'
-        //minDate:'-1970/01/02'//yesterday is minimum date(for today use 0 or -1970/01/01)
-       // maxDate:'+1970/01/02'//tomorrow is maximum date calendar
-    //});
+    jQuery('#startTime').datetimepicker({datepicker:false, format:'H:i'});
+    jQuery('#endTime').datetimepicker({datepicker:false, format:'H:i'});
+
 
 }
 
@@ -78,7 +79,9 @@ function save() {
     $.ajax({
         type: "POST",
         url: context.ajaxUrl,
-        data: form.serialize()
+        data: form.serialize(),
+
+
     }).done(function () {
         $("#editRow").modal("hide");
         context.updateTable();
